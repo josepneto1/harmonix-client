@@ -1,0 +1,42 @@
+<div class="table-wrapper mat-elevation-z8">
+  <div class="table-scroll">
+    <table 
+      mat-table 
+      [dataSource]="dataSource" 
+      matSort
+      >
+      @for (column of columns; track column.key) {
+        <ng-container [matColumnDef]="column.key">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            [disabled]="!column.sortable"
+            [style.width]="column.minWidth"
+            [style.min-width]="column.minWidth">
+            {{ column.label }}
+          </th>
+
+          <td
+            mat-cell
+            *matCellDef="let row"
+            [style.width]="column.minWidth"
+            [style.max-width]="column.minWidth">
+            {{ format(row[column.key], column, row) }}
+          </td>
+        </ng-container>
+      }
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"
+        (click)="selectedItem.emit(row)"
+        class="selected-row">
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    class="paginator"
+    [pageSizeOptions]="pageSize"
+    showFirstLastButtons>
+  </mat-paginator>
+</div>

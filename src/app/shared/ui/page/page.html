@@ -1,0 +1,13 @@
+<article class="hx-page">
+  @if (showHeader && pageTitle) {
+    <hx-page-header
+      [pageTitle]="pageTitle"
+      [search]="showSearch"
+      (searchChange)="onSearch($event)"
+    />
+  }
+
+  <section class="hx-page__content">
+    <ng-content></ng-content>
+  </section>
+</article>

@@ -1,0 +1,39 @@
+@use '@angular/material' as mat;
+@use './tokens' as *;
+
+@include mat.core();
+
+:root {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: (
+        40: $harmonix-primary,
+        90: $harmonix-primary-light,
+        100: #ffffff,
+      ),
+      error: (
+        40: $harmonix-error,
+      ),
+    ),
+    typography: (
+      brand-family: 'Roboto',
+      plain-family: 'Roboto',
+    ),
+    density: 0,
+  ));
+
+  --mat-sys-surface: #{$harmonix-surface};
+  --mat-sys-background: #{$harmonix-bg};
+  --mat-sys-on-surface: #{$text-primary};
+  --mat-sys-on-background: #{$text-primary};
+  --mat-sys-text-secondary: #{$text-secondary};
+
+  --mat-sys-primary-light: #{$harmonix-primary-light};
+  --mat-sys-primary-dark: #{$harmonix-primary-dark};
+  --mat-sys-on-primary-dark: #ffffff;
+  --mat-sys-success: #{$harmonix-success};
+  --mat-sys-on-success: #ffffff;
+  --mat-sys-error: #{$harmonix-error};
+  --mat-sys-on-error: #ffffff;
+}

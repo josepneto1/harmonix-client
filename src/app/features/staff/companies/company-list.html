@@ -1,0 +1,27 @@
+<hx-page
+  [showHeader]="true"
+  pageTitle="Clínicas"
+  [showSearch]="true"
+  (searchChange)="onSearch($event)"
+>
+  <div class="buttons-container">
+    <hx-button
+      label="ADICIONAR"
+      icon="add"
+      [size]="'small'"
+      (clicked)="add()"
+      [disabled]="false"
+    />
+  </div>
+  <div class="customer-container">
+    <hx-data-table
+      [columns]="columns"
+      [data]="companies()"
+      [filter]="searchTerm"
+      length="3"
+      (selectedItem)="openEdit($event)">
+    </hx-data-table>
+  </div>
+  
+  <router-outlet/>
+</hx-page>

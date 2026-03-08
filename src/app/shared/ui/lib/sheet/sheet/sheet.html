@@ -1,0 +1,25 @@
+<article class="sheet">
+  <header class="sheet__header">
+    <span class="sheet__header-title">{{ title }}</span>
+
+    <button 
+      mat-icon-button 
+      class="sheet__header-close-btn"
+      (click)="onClose()">
+      <mat-icon class="sheet__header-icon">close</mat-icon>
+    </button>
+  </header>
+  
+  <section class="sheet__content">
+    <ng-content></ng-content>
+  </section>
+
+  <footer class="sheet__footer">
+      <hx-button
+        label="SALVAR"
+        [size]="'small'"
+        [disabled]="false"
+        (clicked)="onSave()"
+      />
+  </footer>
+</article>

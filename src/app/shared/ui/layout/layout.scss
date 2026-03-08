@@ -1,0 +1,87 @@
+@use '../../../../styles/tokens' as *;
+
+.icon-filled {
+  font-variation-settings: 'FILL' 0;
+}
+
+.sidenav-container {
+  height: calc(100vh - 52px);
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 52px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .toolbar-title {
+    font-size: 1.7rem;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-left: 30px;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+}
+
+.toolbar mat-icon {
+  transition: transform 200ms ease;
+}
+
+.toolbar button[aria-expanded="true"] mat-icon {
+  transform: scaleX(-1);
+}
+
+.sidenav {
+  width: 240px;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 0;
+
+  &.collapsed {
+    width: 60px;
+  }
+
+  mat-nav-list {
+    padding: 0;
+  }
+}
+
+.menu-item {
+  &:hover {
+    background-color: $harmonix-primary-light;
+  }
+
+  &.active {
+    background-color: $harmonix-primary-light;
+    border-right: 4px solid $harmonix-primary-dark;
+
+    mat-icon {
+      color: $harmonix-primary-dark;
+    }
+  }
+
+  mat-icon {
+    width: 24px;
+    min-width: 24px;
+    text-align: center;
+    color: $text-secondary;
+  }
+
+  .label {
+    font-weight: 500;
+    color: $text-primary;
+    white-space: nowrap;
+  }
+}
+
+.content {
+  height: 100%;
+  overflow: hidden;
+}
+
+.mat-mdc-list-item {
+  border-radius: 0 !important;
+}

@@ -1,0 +1,16 @@
+<div class="snackbar">
+  <mat-icon class="icon">
+    {{ data.type === type.Success ? 'check_circle' : 'error' }}
+  </mat-icon>
+
+  <span class="message">{{ data.message }}</span>
+
+  <button mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <mat-progress-bar
+    mode="determinate"
+    [value]="progress">
+  </mat-progress-bar>
+</div>

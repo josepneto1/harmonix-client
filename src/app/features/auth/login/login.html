@@ -1,0 +1,51 @@
+<div class="login">
+  <div class="login-container">
+    <mat-card class="login-card">
+      <mat-card-header>
+        <div class="login-card__header">
+          <div>
+            <img src="/harmonix-logo.svg" class="login-card__logo">
+          </div>
+          <h1>Harmonix</h1>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <hx-input
+            formControlName="email"
+            label="Email"
+            type="email"
+            placeholder="seu@email.com"
+            prefixIcon="email"
+            autocomplete="email"
+            [errorMessages]="{
+              required: 'Este campo é obrigatório',
+              email: 'Email inválido'
+            }"
+          />
+
+          <hx-input
+            formControlName="password"
+            label="Senha"
+            type="password"
+            placeholder="••••••••"
+            prefixIcon="lock"
+            autocomplete="current-password"
+            [showPasswordToggle]="true"
+            [errorMessages]="{
+              required: 'Este campo é obrigatório',
+              minlength: 'Senha deve ter no mínimo 6 caracteres'
+            }"
+          />
+
+          <hx-button
+            [type]="'submit'"
+            [disabled]="isLoading()"
+            label="ENTRAR"
+            [fullWidth]="true"
+          />
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

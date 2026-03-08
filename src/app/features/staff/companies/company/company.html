@@ -1,0 +1,35 @@
+<hx-sheet
+  [title]="title"
+  (save)="save()"
+  (close)="onClose()"
+>
+  <form [formGroup]="form" class="form-container">
+    <mat-slide-toggle
+      formControlName="isActive"
+      class="form-container__slide-toggle"
+      [disabled]="!companyId || isLoading"
+      (change)="onStatusToggle($event.checked)">
+      Clínica ativa
+    </mat-slide-toggle>
+
+    <hx-input
+      formControlName="name"
+      label="Nome da clínica"
+      placeholder="Ex: Clínica Harmonix"
+      [maxLength]="100"
+    />
+
+    <hx-input
+      formControlName="alias"
+      label="Alias"
+      placeholder="Ex: harmonix"
+      [maxLength]="20"
+    />
+
+    <hx-input
+      formControlName="expirationDate"
+      label="Data de expiração"
+      type="text"
+    />
+  </form>
+</hx-sheet>

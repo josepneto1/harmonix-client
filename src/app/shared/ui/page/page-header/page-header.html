@@ -1,0 +1,27 @@
+<header class="page-header">
+  <div class="title">
+    <h1>{{ pageTitle }}</h1>
+  </div>
+
+  @if (search) {
+    <div class="search">
+      <mat-form-field appearance="fill">
+        <mat-icon matPrefix>search</mat-icon>
+
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="searchTerm"
+          [placeholder]="searchPlaceholder"
+          (keydown.enter)="onSearch()"
+        />
+
+        @if (searchTerm) {
+          <button mat-icon-button matSuffix (click)="clear()">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </div>
+  }
+</header>

@@ -1,0 +1,23 @@
+<button
+  [matButton]="matBtnType"
+  [disabled]="disabled"
+  [color]="color"
+  [type]="type"
+  (click)="onClick()"
+  [style.width]="fullWidth ? '100%' : 'auto'"
+  [class.hx-primary]="color === 'primary'"
+  [class.hx-success]="color === 'success'"
+  [class.hx-error]="color === 'error'"
+  [ngClass]="'hx-' + size"
+>
+  @if (icon && iconPosition === 'left') {
+    <mat-icon>
+      {{ icon }}
+    </mat-icon>
+  }
+
+  <span>{{ label }}</span>
+  @if (icon && iconPosition === 'right') {
+    <mat-icon class="icon">{{ icon }}</mat-icon>
+  }
+</button>

@@ -1,0 +1,88 @@
+@use '../../../../../../styles/tokens' as *;
+
+button {
+  border-radius: 6px !important;
+  letter-spacing: 0.7px;
+  padding: 8px 12px !important;
+}
+
+button mat-icon:only-child {
+  margin: 0;
+}
+
+.hx-small {
+  height: 34px;
+  font-size: 14px;
+}
+
+//----- FILLED -----\\
+.hx-primary:not(:disabled) {
+  --mat-button-filled-container-color: var(--mat-sys-primary-dark);
+  --mat-button-filled-label-text-color: var(--mat-sys-on-primary-dark);
+}
+.hx-success:not(:disabled) {
+  --mat-button-filled-container-color: var(--mat-sys-success);
+  --mat-button-filled-label-text-color: var(--mat-sys-on-success);
+}
+.hx-error:not(:disabled) {
+  --mat-button-filled-container-color: var(--mat-sys-error);
+  --mat-button-filled-label-text-color: var(--mat-sys-on-error);
+}
+
+//----- OUTLINED -----\\
+.hx-primary:not(:disabled) {
+  --mat-button-outlined-outline-color: var(--mat-sys-primary-dark);
+  --mat-button-outlined-label-text-color: var(--mat-sys-primary-dark);
+}
+.hx-success:not(:disabled) {
+  --mat-button-outlined-outline-color: var(--mat-sys-success);
+  --mat-button-outlined-label-text-color: var(--mat-sys-success);
+}
+.hx-error:not(:disabled) {
+  --mat-button-outlined-outline-color: var(--mat-sys-error);
+  --mat-button-outlined-label-text-color: var(--mat-sys-error);
+}
+
+::ng-deep .mat-mdc-outlined-button {
+  background-color: var(--mat-sys-surface) !important;
+
+  &.hx-primary:not(:disabled) {
+    .mat-mdc-button-persistent-ripple::before {
+      background-color: var(--mat-sys-primary-dark);
+    }
+  }
+  
+  &.hx-success:not(:disabled) {
+    .mat-mdc-button-persistent-ripple::before {
+      background-color: var(--mat-sys-success);
+    }
+
+    .mat-ripple-element {
+      background-color: var(--mat-sys-success);
+      opacity: 0.12;
+    }
+  }
+  
+  &.hx-error:not(:disabled) {
+    .mat-mdc-button-persistent-ripple::before {
+      background-color: var(--mat-sys-error);
+    }
+
+    .mat-ripple-element {
+      background-color: var(--mat-sys-error);
+      opacity: 0.12;
+    }
+  }
+}
+
+::ng-deep {
+  .mat-mdc-button > .mat-icon,
+  .mat-mdc-unelevated-button > .mat-icon,
+  .mat-mdc-raised-button > .mat-icon,
+  .mat-mdc-outlined-button > .mat-icon,
+  .mat-tonal-button > .mat-icon {
+    font-size: 26px !important;
+    width: 30px !important;
+    margin-right: 0 !important;
+  }
+}

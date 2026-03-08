@@ -1,0 +1,61 @@
+<mat-toolbar color="primary" class="toolbar">
+  <button
+    mat-icon-button
+    (click)="toggleMenu()"
+    aria-label="Toggle menu"
+    [attr.aria-expanded]="menuExpanded()"
+  >
+    <mat-icon>
+      {{ menuExpanded() ? 'menu_open' : 'menu' }}
+    </mat-icon>
+  </button>
+
+  <span class="toolbar-title">Harmonix</span>
+
+  <span class="spacer"></span>
+
+  <button
+    mat-icon-button
+    (click)="openProfile()"
+    aria-label="Perfil do usuário"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container" autosize>
+  <mat-sidenav
+    class="sidenav"
+    mode="side"
+    [opened]="true"
+    [class.collapsed]="!menuExpanded()"
+  >
+    <mat-nav-list>
+        @for (item of menuItems; track item.path) {
+          <mat-list-item
+            class="menu-item"
+            (click)="navigateTo(item.path)"
+            [class.active]="isActive(item.path)"
+            [matTooltip]="item.label"
+            matTooltipPosition="right"
+            [matTooltipDisabled]="menuExpanded()"
+            [matTooltipShowDelay]="100"
+            [matTooltipHideDelay]="100"
+          >
+          <mat-icon 
+            matListItemIcon
+            class="icon-filled">
+            {{ item.icon }}
+          </mat-icon>
+            <span class="label">{{ item.label }}</span>
+          </mat-list-item>
+        }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
