@@ -1,15 +1,18 @@
-import { inject, Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { ApiHelperService } from "../../../../shared/http/services/api-helper-service";
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiHelperService } from '../../../../shared/http/services/api-helper-service';
+import { ICompany } from '../interfaces/company.interface';
+import { IQueryParams } from '../../../../shared/http/services/interfaces/query-params.interface';
+import { IQueryResponse } from '../../../../shared/http/services/interfaces/query-response.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class CompanyService { 
+export class CompanyService {
   private api = inject(ApiHelperService);
 
-  listCompanies(): Observable<any[]> {
-    return this.api.get<any[]>('staff/companies/list');
+  listCompanies(params: IQueryParams): Observable<IQueryResponse<ICompany>> {
+    return this.api.get<IQueryResponse<ICompany>>('staff/companies/list', params);
   }
 
   getById(id: string): Observable<any> {

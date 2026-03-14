@@ -1,10 +1,12 @@
 <div class="table-wrapper mat-elevation-z8">
   <div class="table-scroll">
-    <table 
-      mat-table 
-      [dataSource]="dataSource" 
+    <table
+      mat-table
+      [dataSource]="dataSource"
       matSort
-      >
+      [matSortActive]="activeSort"
+      [matSortDirection]="sortDirection"
+      (matSortChange)="onSortChange($event)">
       @for (column of columns; track column.key) {
         <ng-container [matColumnDef]="column.key">
           <th
@@ -26,8 +28,11 @@
           </td>
         </ng-container>
       }
+      
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
         (click)="selectedItem.emit(row)"
         class="selected-row">
       </tr>
@@ -36,7 +41,11 @@
 
   <mat-paginator
     class="paginator"
-    [pageSizeOptions]="pageSize"
-    showFirstLastButtons>
+    [length]="total"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    showFirstLastButtons
+    (page)="onPageChange($event)">
   </mat-paginator>
 </div>

@@ -47,12 +47,7 @@ export class Login {
     this.authService.login(email, password).subscribe({
       next: () => {
         if (this.authService.isSysAdmin()) {
-          this.router.navigate(['/staff/companies']).then(success => {
-            if (!success) {
-              this.snackBar.open('Erro ao redirecionar', 'Fechar', {
-                duration: 7000
-              });
-            }
+          this.router.navigate(['/staff/companies']).then(() => {
             this.isLoading.set(false);
           });
 
@@ -77,12 +72,7 @@ export class Login {
           this.isLoading.set(false);
         });
       },
-      error: (err) => {
-        this.snackBar.open(
-          err.error?.message || 'Erro ao fazer login',
-          'Fechar',
-          { duration: 7000 }
-        );
+      error: () => {
         this.isLoading.set(false);
       }
     });

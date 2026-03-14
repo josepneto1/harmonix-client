@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
@@ -21,8 +21,10 @@ import { MatDividerModule } from '@angular/material/divider';
 export class Sheet {
   data = inject<ISheetData>(MAT_BOTTOM_SHEET_DATA);
 
+  @Input() saveDisabled = false;
   @Output() save = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
+
   get title(): string {
     return this.data?.title ?? '';
   }
