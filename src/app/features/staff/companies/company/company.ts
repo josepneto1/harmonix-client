@@ -9,6 +9,7 @@ import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { firstValueFrom } from 'rxjs';
 import { RefreshService } from '../../../../shared/http/services/refresh-service';
+import { SnackBarService } from '../../../../shared/ui/lib/snackbar/services/snack-bar-service';
 
 @Component({
   selector: 'app-company',
@@ -30,6 +31,7 @@ export class Company implements OnInit {
   private companyService = inject(CompanyService);
   private sheetData = inject(MAT_BOTTOM_SHEET_DATA, { optional: true });
   private refreshService = inject(RefreshService);
+  private snackBar = inject(SnackBarService);
 
   title: string = 'Nova clínica';
   companyId?: string;
@@ -95,19 +97,21 @@ export class Company implements OnInit {
     try {
       if (this.companyId) {
         await firstValueFrom(this.companyService.update(data));
+        this.snackBar.success('Clinica atualizada com sucesso');
       } else {
         await firstValueFrom(this.companyService.create(data));
+        this.snackBar.success('Clinica criada com sucesso');
       }
 
       this.refreshService.triggerRefresh();
-
       this.form.markAsPristine();
+      this.closeSheet();
+    } catch (err: any) {
+      console.log('erro', err)
     } finally {
       this.isLoading = false;
-      this.closeSheet();
     }
   }
-
 
   onClose(): void {
     this.closeSheet();

@@ -4,7 +4,7 @@ import { Injectable, signal } from "@angular/core";
   providedIn: 'root'
 })
 export class RefreshService {
-  refresh = signal(0);;
+  refresh = signal(0);
 
   triggerRefresh(): void {
     this.refresh.set(this.refresh() + 1);
