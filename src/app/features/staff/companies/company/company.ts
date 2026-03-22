@@ -10,6 +10,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { firstValueFrom } from 'rxjs';
 import { RefreshService } from '../../../../shared/http/services/refresh-service';
 import { SnackBarService } from '../../../../shared/ui/lib/snackbar/services/snack-bar-service';
+import { IActionButtonItem } from '../../../../shared/ui/lib/buttons/action-button/interfaces/action-button-item.interface';
 
 @Component({
   selector: 'app-company',
@@ -35,7 +36,10 @@ export class Company implements OnInit {
 
   title: string = 'Nova clínica';
   companyId?: string;
-  isLoading = false;
+  isLoading: boolean = false;
+  hasCompanyChanges: boolean = false;
+
+  actionsBtn: IActionButtonItem[] = [];
 
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
@@ -53,6 +57,7 @@ export class Company implements OnInit {
       this.loadCompany(id);
     } else {
       this.title = 'Nova clínica';
+      this.refreshActions();
     }
   }
 
@@ -69,7 +74,10 @@ export class Company implements OnInit {
             isActive: company.isActive
           });
 
-          this.form.get('isActive')?.enable();
+          this.refreshActions();
+
+          if (!company.isActive)
+            this.form.disable();
 
           this.form.markAsPristine();
           this.isLoading = false;
@@ -89,7 +97,7 @@ export class Company implements OnInit {
       id: this.companyId,
       name: formValue.name,
       alias: formValue.alias,
-      expirationDate: new Date(formValue.expirationDate!)
+      expirationDate: new Date(formValue.expirationDate!),
     };
 
     this.isLoading = true;
@@ -103,18 +111,14 @@ export class Company implements OnInit {
         this.snackBar.success('Clinica criada com sucesso');
       }
 
-      this.refreshService.triggerRefresh();
       this.form.markAsPristine();
+
+      this.hasCompanyChanges = true;
+
       this.closeSheet();
-    } catch (err: any) {
-      console.log('erro', err)
     } finally {
       this.isLoading = false;
     }
-  }
-
-  onClose(): void {
-    this.closeSheet();
   }
 
   private isValidForm(): boolean {
@@ -125,7 +129,9 @@ export class Company implements OnInit {
     return true;
   }
 
-  private closeSheet(): void {
+  closeSheet(): void {
+    if (this.hasCompanyChanges)
+      this.refreshService.triggerRefresh();
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
@@ -148,12 +154,60 @@ export class Company implements OnInit {
 
     try {
       await firstValueFrom(this.companyService.changeStatus(data));
-      // sucesso
-      control?.markAsPristine();
+      control?.setValue(isActive);
+      
+      if (!isActive)
+        this.form.disable();
+      else 
+        this.form.enable();
+
+      this.hasCompanyChanges = true;
     } catch {
       control?.setValue(!isActive);
     } finally {
       this.isLoading = false;
     }
+  }
+
+  async deleteCompany() {
+    console.log('deletou')
+  }
+
+  async onSheetAction(action: IActionButtonItem): Promise<void> {
+    const isActive = this.form.get('isActive')?.value;
+    switch (action.id) {
+      case 'activate':
+      case 'deactivate':
+        await this.onStatusToggle(!isActive!);
+      break;
+      case 'delete':
+        this.deleteCompany();
+        break;
+    }
+  }
+
+  private getActions(isActive: boolean): IActionButtonItem[] {
+    return [
+      {
+        id: isActive ? 'deactivate' : 'activate',
+        label: isActive ? 'Inativar' : 'Ativar',
+        icon: isActive ? 'toggle_off' : 'toggle_on'
+      },
+      {
+        id: 'delete',
+        label: 'Excluir',
+        icon: 'delete',
+      }
+    ];
+  }
+
+  refreshActions(): void {
+    if (!this.companyId) {
+      this.actionsBtn = [];
+      return;
+    }
+
+    const isActive = this.form.get('isActive')?.value ?? true;
+    this.actionsBtn = this.getActions(isActive);
   }
 }

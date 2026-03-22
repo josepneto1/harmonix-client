@@ -48,21 +48,28 @@ export class CompanyList {
 
   columns = [
     { key: 'id', label: 'Id', sortable: true, minWidth: '280px' },
-    { key: 'name', label: 'Nome', sortable: true, minWidth: '200px' },
-    { key: 'alias', label: 'Alias', sortable: true, minWidth: '200px' },
+    { key: 'name', label: 'Nome', sortable: true, minWidth: '440px' },
+    { key: 'alias', label: 'Alias', sortable: true, minWidth: '150px' },
     {
       key: 'createdAt',
       label: 'Criado em',
       sortable: true,
-      minWidth: '200px',
+      minWidth: '150px',
       formatter: DateUtils.format,
     },
     {
       key: 'expirationDate',
       label: 'Expira em',
       sortable: true,
-      minWidth: '200px',
+      minWidth: '150px',
       formatter: DateUtils.format,
+    },
+    { 
+      key: 'isActive', 
+      label: 'Status', 
+      sortable: false,
+      minWidth: '100px', 
+      formatter: (isActive: boolean) => isActive ? 'Ativo' : 'Inativo' 
     },
   ];
 

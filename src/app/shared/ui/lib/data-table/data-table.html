@@ -23,7 +23,8 @@
             mat-cell
             *matCellDef="let row"
             [style.width]="column.minWidth"
-            [style.max-width]="column.minWidth">
+            [style.max-width]="column.minWidth"
+            [style.font-style]="row?.isActive === false ? 'italic' : 'normal'">
             {{ format(row[column.key], column, row) }}
           </td>
         </ng-container>
@@ -33,6 +34,7 @@
       <tr
         mat-row
         *matRowDef="let row; columns: displayedColumns"
+        [ngClass]="{'inactive-row': row?.isActive === false}"
         (click)="selectedItem.emit(row)"
         class="selected-row">
       </tr>

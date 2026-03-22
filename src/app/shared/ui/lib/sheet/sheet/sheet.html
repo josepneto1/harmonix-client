@@ -1,13 +1,26 @@
 <article class="sheet">
   <header class="sheet__header">
-    <span class="sheet__header-title">{{ title }}</span>
+    <span class="sheet__header-title">{{ sheetTitle }}</span>
 
-    <button 
-      mat-icon-button 
-      class="sheet__header-close-btn"
-      (click)="onClose()">
-      <mat-icon class="sheet__header-icon">close</mat-icon>
-    </button>
+    <div class="sheet__header-container-btn">
+      @if (actions.length) {
+        <hx-action-button
+          label="Opcoes"
+          icon="more_vert"
+          [actions]="actions"
+          (actionSelected)="onActionSelected($event)"
+          (menuOpened)="onActionsMenuOpened()"
+        />
+      }
+      
+      <button
+        mat-icon-button
+        class="sheet__header-close-btn"
+        (click)="onClose()"
+      >
+        <mat-icon class="sheet__header-icon">close</mat-icon>
+      </button>
+    </div>
   </header>
   
   <section class="sheet__content">

@@ -1,1 +1,25 @@
-<p>action-buttons works!</p>
+<button
+  mat-icon-button
+  [matMenuTriggerFor]="menu"
+  [disabled]="disabled"
+  class="action-button"
+  aria-label="Opcoes"
+  (menuOpened)="menuOpened.emit()"
+>
+  <mat-icon>{{ icon }}</mat-icon>
+</button>
+
+<mat-menu #menu="matMenu" class="action-button-menu">
+  @for (action of actions; track action.id) {
+    <button
+      mat-menu-item
+      [disabled]="action.disabled"
+      (click)="onActionClick(action)">
+      @if (action.icon) {
+        <mat-icon>{{ action.icon }}</mat-icon>
+      }
+
+      <span>{{ action.label }}</span>
+    </button>
+  }
+</mat-menu>

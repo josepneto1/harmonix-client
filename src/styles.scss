@@ -8,7 +8,7 @@ body {
   color: var(--mat-sys-on-background);
 }
 
-//estilo do paginator aberto (datatable)
+//paginator aberto (datatable)
 .cdk-overlay-pane {
   .mat-mdc-select-panel {
     background: var(--mat-sys-surface);
@@ -20,3 +20,19 @@ body {
     }
   }
 }
+//---------
+
+//background do action-button aberto
+.mat-mdc-menu-panel.action-button-menu {
+  --mat-menu-container-color: var(--mat-sys-surface);
+  --mat-menu-container-elevation-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+  background-color: var(--mat-sys-surface) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+  overflow: hidden;
+}
+
+.mat-mdc-menu-panel.action-button-menu .mat-mdc-menu-content {
+  padding: 6px;
+}
+//---------

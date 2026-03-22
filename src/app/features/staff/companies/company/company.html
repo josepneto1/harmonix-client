@@ -1,18 +1,12 @@
 <hx-sheet
-  [title]="title"
-  [saveDisabled]="isLoading || form.invalid || !form.dirty"
+  [saveDisabled]="isLoading || form.invalid || form.disabled"
+  [actions]="actionsBtn"
+  (actionsMenuOpened)="refreshActions()"
+  (actionSelected)="onSheetAction($event)"
   (save)="save()"
-  (close)="onClose()"
+  (close)="closeSheet()"
 >
   <form [formGroup]="form" class="form-container">
-    <mat-slide-toggle
-      formControlName="isActive"
-      class="form-container__slide-toggle"
-      [disabled]="!companyId"
-      (change)="onStatusToggle($event.checked)">
-      Clínica ativa
-    </mat-slide-toggle>
-
     <hx-input
       formControlName="name"
       label="Nome da clínica"

@@ -36,7 +36,7 @@ export const routes: Routes = [
             canDeactivate: [SheetGuard],
             data: { 
               bottomSheet: Company, 
-              title: 'Nova clínica' 
+              sheetTitle: 'Nova clínica' 
             }
           },
           { 
@@ -46,7 +46,7 @@ export const routes: Routes = [
           canDeactivate: [SheetGuard],
           data: { 
             bottomSheet: Company, 
-            title: 'Editar clínica',
+            sheetTitle: 'Editar clínica',
           }
         }
       ]
