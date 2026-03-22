@@ -10,6 +10,11 @@
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
+    &-container-btn {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
 
     &-close-btn {
       border-radius: 6px;

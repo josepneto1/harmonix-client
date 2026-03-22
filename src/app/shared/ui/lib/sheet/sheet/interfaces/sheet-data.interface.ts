@@ -1,4 +1,4 @@
 export interface ISheetData {
-  title: string;
+  sheetTitle: string;
   showSave?: boolean;
 }

@@ -25,6 +25,14 @@ table {
   cursor: pointer;
 }
 
+.inactive-row {
+  opacity: 0.8;
+}
+
+.inactive-row .mat-mdc-cell {
+  font-style: italic;
+}
+
 ::ng-deep {
   .mat-mdc-table {
     

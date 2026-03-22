@@ -14,17 +14,17 @@ export class SheetService {
 
   async open(
     component: any, 
-    config?: { title?: string; params?: any; data?: any }
+    config?: { sheetTitle?: string; params?: any; data?: any }
   ): Promise<void> {
     if (this.bottomSheetRef) return;
 
-    this.currentTitle = config?.title;
+    this.currentTitle = config?.sheetTitle;
 
     this.bottomSheetRef = this.matBottomSheet.open(component, {
       panelClass: ['hx-sheet-container'],
       disableClose: true,
       data: {
-        title: config?.title,
+        sheetTitle: config?.sheetTitle,
         params: config?.params,
         routeData: config?.data
       }
@@ -41,16 +41,12 @@ export class SheetService {
       return true;
     }
 
-    // Se o formulário não está sujo, fecha direto
     if (!this.isFormDirty) {
       this.bottomSheetRef.dismiss();
       this.isFormDirty = false;
       return true;
     }
 
-    // Aqui você pode adicionar lógica de confirmação
-    // Por enquanto, sempre permite fechar
-    // TODO: Implementar diálogo de confirmação se necessário
     this.bottomSheetRef.dismiss();
     this.isFormDirty = false;
     return true;

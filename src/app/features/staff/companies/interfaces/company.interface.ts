@@ -4,4 +4,5 @@ export interface ICompany {
   alias: string;
   createdAt: Date;
   expirationDate: Date;
+  isActive: boolean;
 }

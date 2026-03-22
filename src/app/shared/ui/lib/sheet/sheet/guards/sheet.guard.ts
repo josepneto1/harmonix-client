@@ -12,11 +12,11 @@ export class SheetGuard implements CanActivate, CanDeactivate<OnSheetDeactivate>
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const component = route.data['bottomSheet'];
-    const title = route.data['title'];
+    const sheetTitle = route.data['sheetTitle'];
 
     if (component && !this.sheetService.isOpen()) {
       this.sheetService.open(component, {
-        title,
+        sheetTitle,
         params: route.params,
         data: route.data
       });
