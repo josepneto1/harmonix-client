@@ -4,7 +4,6 @@ import { authGuard } from './features/auth/guards/auth.guard';
 import { loginGuard } from './features/auth/guards/login.guard';
 import { sysAdminGuard } from './features/auth/guards/sysAdmin.guard';
 import { Login } from './features/auth/login/login';
-import { Users } from './features/staff/users/users';
 import { Home } from './features/home/home';
 import { Appointments } from './features/appointments/appointments';
 import { Customers } from './features/customers/customers';
@@ -13,6 +12,8 @@ import { CompanyList } from './features/staff/companies/company-list';
 import { Company } from './features/staff/companies/company/company';
 import { EmptyPage } from './shared/ui/page/empty-page';
 import { SheetGuard } from './shared/ui/lib/sheet/sheet/guards/sheet.guard';
+import { UsersList } from './features/staff/users/users-list';
+import { User } from './features/staff/users/user/user';
 
 export const routes: Routes = [
   {
@@ -52,7 +53,29 @@ export const routes: Routes = [
       ]
       },
       {
-        path: 'users', component: Users, title: 'Harmonix | Usuários',
+        path: 'users', component: UsersList, title: 'Harmonix | Usuários',
+        children: [
+          {
+            path: 'new',
+            component: EmptyPage,
+            canActivate: [SheetGuard],
+            canDeactivate: [SheetGuard],
+            data: {
+              bottomSheet: User,
+              sheetTitle: 'Novo usuário',
+            }
+          },
+          {
+            path: ':id/edit',
+            component: EmptyPage,
+            canActivate: [SheetGuard],
+            canDeactivate: [SheetGuard],
+            data: {
+              bottomSheet: User,
+              sheetTitle: 'Editar usuário',
+            }
+          }
+        ]
       },
       {
         path: '',

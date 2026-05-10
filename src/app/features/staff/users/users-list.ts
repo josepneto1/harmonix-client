@@ -9,30 +9,29 @@ import { DataTable } from '../../../shared/ui/lib/data-table/data-table';
 import { Button } from '../../../shared/ui/lib/buttons/button/button';
 import { RefreshService } from '../../../shared/http/services/refresh-service';
 import { DateUtils } from '../../../shared/utils/date-utils';
-import { CompanyService } from './services/company-service';
-import { ICompany } from './interfaces/company.interface';
+import { UserService } from './services/user-service';
+import { IUser } from './interfaces/user.interface';
 
 @Component({
-  selector: 'app-company-list',
-  standalone: true,
+  selector: 'app-users',
   imports: [
     Page,
     DataTable,
     Button,
-    RouterOutlet
+    RouterOutlet,
   ],
-  templateUrl: './company-list.html',
-  styleUrl: './company-list.scss',
+  templateUrl: './users-list.html',
+  styleUrl: './users-list.scss',
 })
-export class CompanyList {
-  private companyService = inject(CompanyService);
+export class UsersList {
+  private userService = inject(UserService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private refreshService = inject(RefreshService);
 
   searchTerm: string = '';
 
-  companies = signal<ICompany[]>([]);
+  users = signal<IUser[]>([]);
   total = signal(0);
 
   pageIndex = 0;
@@ -42,28 +41,16 @@ export class CompanyList {
 
   columns = [
     { key: 'id', label: 'Id', sortable: true, minWidth: '280px' },
-    { key: 'name', label: 'Nome', sortable: true, minWidth: '440px' },
-    { key: 'alias', label: 'Alias', sortable: true, minWidth: '150px' },
+    { key: 'name', label: 'Nome', sortable: true, minWidth: '280px' },
+    { key: 'email', label: 'E-mail', sortable: true, minWidth: '230px' },
+    { key: 'companyName', label: 'Clínica', sortable: true, minWidth: '200px' },
+    { key: 'role', label: 'Papel', sortable: true, minWidth: '120px' },
     {
       key: 'createdAt',
       label: 'Criado em',
       sortable: true,
       minWidth: '150px',
       formatter: DateUtils.format,
-    },
-    {
-      key: 'expirationDate',
-      label: 'Expira em',
-      sortable: true,
-      minWidth: '150px',
-      formatter: DateUtils.format,
-    },
-    { 
-      key: 'isActive', 
-      label: 'Status', 
-      sortable: false,
-      minWidth: '100px', 
-      formatter: (isActive: boolean) => isActive ? 'Ativo' : 'Inativo' 
     },
   ];
 
@@ -76,7 +63,7 @@ export class CompanyList {
 
   async load(): Promise<void> {
     const result = await firstValueFrom(
-      this.companyService.listCompanies({
+      this.userService.listUsers({
         page: this.pageIndex + 1,
         pageSize: this.pageSize,
         search: this.searchTerm,
@@ -85,9 +72,8 @@ export class CompanyList {
       })
     );
 
-    this.companies.set(result.data);
+    this.users.set(result.data);
     this.total.set(result.totalCount);
-
     this.pageIndex = result.page - 1;
     this.pageSize = result.pageSize;
   }
@@ -115,7 +101,7 @@ export class CompanyList {
     this.router.navigate(['new'], { relativeTo: this.route });
   }
 
-  openEdit(company: ICompany): void {
-    this.router.navigate([company.id, 'edit'], { relativeTo: this.route });
+  openEdit(user: IUser): void {
+    this.router.navigate([user.id, 'edit'], { relativeTo: this.route });
   }
 }

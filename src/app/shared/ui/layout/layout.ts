@@ -1,8 +1,6 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
@@ -21,8 +19,6 @@ interface IMenuItem {
   imports: [
     CommonModule,
     RouterOutlet,
-    MatToolbarModule,
-    MatSidenavModule,
     MatIconModule,
     MatButtonModule,
     MatListModule,
@@ -53,9 +49,9 @@ export class Layout {
       ];
       return;
     }
-    
+
     if (!this.companyAlias) return;
-    
+
     this.menuItems = [
       { path: `/${this.companyAlias}/home`, label: 'Home', icon: 'home' },
       { path: `/${this.companyAlias}/appointments`, label: 'Atendimentos', icon: 'event' },
@@ -74,11 +70,6 @@ export class Layout {
 
   navigateTo(path: string): void {
     this.router.navigate([path]);
-  }
-
-  openProfile(): void {
-    this.authService.logout();
-    console.log('logout')
   }
 
   logout(): void {

@@ -4,9 +4,17 @@
   background-color: transparent;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   height: 56px;
   padding: 0 20px;
+
+  .spacer {
+    flex: 1;
+  }
+
+  .logout-btn {
+    color: $text-secondary;
+    margin-left: 8px;
+  }
 }
 
 .title {
@@ -32,11 +40,11 @@
       border-radius: 24px;
       padding: 0 16px;
       height: 36px;
-      box-shadow: 0 0 0 1px rgba(214, 165, 233, 0.3);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
       transition: all 0.2s ease;
 
       &:hover {
-        box-shadow: 0 0 0 1px rgba(195, 95, 235, 0.5);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.24);
       }
     }
 
@@ -72,7 +80,7 @@
     }
 
     .mat-icon {
-      color: $harmonix-primary;
+      color: $harmonix-primary-dark;
       font-size: 20px;
       width: 20px;
       height: 20px;
@@ -81,7 +89,7 @@
     .mat-mdc-form-field.mat-focused {
       .mat-mdc-text-field-wrapper {
         background-color: $harmonix-primary-light;
-        box-shadow: 0 0 0 2px $harmonix-primary;
+        box-shadow: 0 0 0 2px $harmonix-primary-dark;
       }
 
       .mat-icon {

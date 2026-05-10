@@ -27,6 +27,7 @@ export class SnackBar {
 
   type = ESnackBarType;
   progress = 0;
+  progressDone = false;
 
   constructor() {
     this.startProgressBar(this.data.duration);
@@ -41,6 +42,8 @@ export class SnackBar {
 
       if (this.progress >= 100) {
         clearInterval(interval);
+        this.progressDone = true;
+        this.cdRef.detectChanges();
       }
     }, 100);
   }
