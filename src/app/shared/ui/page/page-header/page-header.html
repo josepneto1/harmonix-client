@@ -3,6 +3,8 @@
     <h1>{{ pageTitle }}</h1>
   </div>
 
+  <span class="spacer"></span>
+
   @if (search) {
     <div class="search">
       <mat-form-field appearance="fill">
@@ -24,4 +26,8 @@
       </mat-form-field>
     </div>
   }
+
+  <button mat-icon-button class="logout-btn" (click)="logout()" matTooltip="Sair" matTooltipPosition="below">
+    <mat-icon>logout</mat-icon>
+  </button>
 </header>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Sheet } from '../../../../shared/ui/lib/sheet/sheet/sheet';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputField } from '../../../../shared/ui/lib/inputs/input/input-field';
+import { DateInput } from '../../../../shared/ui/lib/inputs/date-input/date-input';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CompanyService } from '../services/company-service';
 import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
@@ -20,6 +21,7 @@ import { IActionButtonItem } from '../../../../shared/ui/lib/buttons/action-butt
     ReactiveFormsModule,
     Sheet,
     InputField,
+    DateInput,
     MatSlideToggleModule
   ],
   templateUrl: './company.html',
@@ -44,7 +46,7 @@ export class Company implements OnInit {
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     alias: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
-    expirationDate: ['', [Validators.required]],
+    expirationDate: [null as Date | null, [Validators.required]],
     isActive: [{ value: true, disabled: false }]
   });
 
@@ -70,7 +72,7 @@ export class Company implements OnInit {
           this.form.patchValue({
             name: company.name,
             alias: company.alias,
-            expirationDate: this.toDateInput(company.expirationDate),
+            expirationDate: new Date(company.expirationDate),
             isActive: company.isActive
           });
 
@@ -97,7 +99,7 @@ export class Company implements OnInit {
       id: this.companyId,
       name: formValue.name,
       alias: formValue.alias,
-      expirationDate: new Date(formValue.expirationDate!),
+      expirationDate: formValue.expirationDate,
     };
 
     this.isLoading = true;
@@ -133,11 +135,6 @@ export class Company implements OnInit {
     if (this.hasCompanyChanges)
       this.refreshService.triggerRefresh();
     this.router.navigate(['../'], { relativeTo: this.route });
-  }
-
-  private toDateInput(date: string | Date): string {
-    const d = new Date(date);
-    return d.toISOString().split('T')[0]; // formato yyyy-MM-dd
   }
 
   async onStatusToggle(isActive: boolean): Promise<void> {

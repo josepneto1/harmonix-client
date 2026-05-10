@@ -1,0 +1,15 @@
+<mat-form-field appearance="fill" class="full-width">
+  <mat-label>{{ label }}</mat-label>
+  <input
+    matInput
+    inputmode="numeric"
+    [placeholder]="placeholder"
+    [value]="displayValue()"
+    [disabled]="isDisabled()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+  />
+  @if (hasError() && touched()) {
+    <mat-error>Data inválida</mat-error>
+  }
+</mat-form-field>

@@ -1,6 +1,6 @@
 <hx-page
   [showHeader]="true"
-  pageTitle="Clínicas"
+  pageTitle="Usuários"
   [showSearch]="true"
   (searchChange)="onSearch($event)">
   <div class="buttons-container">
@@ -12,10 +12,10 @@
       [disabled]="false" />
   </div>
 
-  <div class="companies-container">
+  <div class="users-container">
     <hx-data-table
       [columns]="columns"
-      [data]="companies()"
+      [data]="users()"
       [serverSide]="true"
       [total]="total()"
       [pageIndex]="pageIndex"

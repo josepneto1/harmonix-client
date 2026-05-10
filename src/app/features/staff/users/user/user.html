@@ -1,0 +1,60 @@
+<hx-sheet
+  [saveDisabled]="isLoading || form.invalid"
+  [actions]="actionsBtn"
+  (actionsMenuOpened)="refreshActions()"
+  (actionSelected)="onSheetAction($event)"
+  (save)="save()"
+  (close)="closeSheet()"
+>
+  <form [formGroup]="form" class="form-container">
+    <hx-input
+      formControlName="name"
+      label="Nome"
+      placeholder="Ex: João Silva"
+      [maxLength]="100"
+    />
+
+    <hx-input
+      formControlName="email"
+      label="E-mail"
+      type="email"
+      placeholder="Ex: joao@email.com"
+      [maxLength]="255"
+    />
+
+    <div class="row">
+      @if (!userId) {
+        <mat-form-field appearance="fill">
+          <mat-label>Clínica</mat-label>
+          <mat-select formControlName="companyId">
+            @for (company of companies(); track company.id) {
+              <mat-option [value]="company.id">{{ company.name }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('companyId')?.invalid && form.get('companyId')?.touched) {
+            <mat-error>A clínica é obrigatória</mat-error>
+          }
+        </mat-form-field>
+      }
+
+      <mat-form-field appearance="fill">
+        <mat-label>Perfil</mat-label>
+        <mat-select formControlName="role">
+          @for (role of roles; track role) {
+            <mat-option [value]="role">{{ role }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (!userId) {
+      <hx-input
+        formControlName="password"
+        label="Senha"
+        type="password"
+        [showPasswordToggle]="true"
+        [maxLength]="20"
+      />
+    }
+  </form>
+</hx-sheet>
