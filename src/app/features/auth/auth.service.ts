@@ -111,9 +111,9 @@ export class AuthService {
   logout(): void {
     this.http
       .post(`${this.apiUrl}/auth/logout`, {}, { withCredentials: true })
+      .pipe(catchError(() => of(null)))
       .subscribe(() => {
         this.clearSession();
-
         this.router.navigate(['/login']);
       });
   }

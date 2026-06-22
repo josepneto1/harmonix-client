@@ -1,1 +1,20 @@
-<p>products works!</p>
+<hx-page
+  [showHeader]="true"
+  pageTitle="Produtos"
+  [showSearch]="true"
+  (searchChange)="onSearch($event)">
+  <div class="products-container">
+    <hx-data-table
+      [columns]="columns"
+      [data]="products()"
+      [serverSide]="true"
+      [total]="total()"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [activeSort]="activeSort"
+      [sortDirection]="sortDirection"
+      (sortChange)="onSort($event)"
+      (pageChange)="onPage($event)">
+    </hx-data-table>
+  </div>
+</hx-page>

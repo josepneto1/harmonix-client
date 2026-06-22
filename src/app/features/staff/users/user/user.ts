@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { firstValueFrom } from 'rxjs';
 
@@ -15,6 +16,13 @@ import { UserService } from '../services/user-service';
 import { CompanyService } from '../../companies/services/company-service';
 import { ICompany } from '../../companies/interfaces/company.interface';
 import { ERole } from '../../../../shared/models/enums/role';
+import { ChangeUserPasswordDialog } from './change-password/change-user-password-dialog';
+
+interface IUserSheetData {
+  params?: {
+    id?: string;
+  };
+}
 
 @Component({
   selector: 'app-user',
@@ -31,12 +39,19 @@ import { ERole } from '../../../../shared/models/enums/role';
 })
 export class User implements OnInit {
   private router = inject(Router);
-  private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder).nonNullable;
   private userService = inject(UserService);
   private companyService = inject(CompanyService);
-  private sheetData = inject(MAT_BOTTOM_SHEET_DATA, { optional: true });
+  private dialog = inject(MatDialog);
+  private sheetData = inject(MAT_BOTTOM_SHEET_DATA, { optional: true }) as IUserSheetData | null;
   private refreshService = inject(RefreshService);
   private snackBar = inject(SnackBarService);
+
+  private readonly passwordValidators = [
+    Validators.required,
+    Validators.minLength(8),
+    Validators.maxLength(20),
+  ];
 
   title: string = 'Novo usuário';
   userId?: string;
@@ -52,7 +67,7 @@ export class User implements OnInit {
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
     role: [ERole.User as ERole, [Validators.required]],
-    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
+    password: ['', this.passwordValidators],
   });
 
   ngOnInit(): void {
@@ -61,13 +76,12 @@ export class User implements OnInit {
     if (id) {
       this.userId = id;
       this.title = 'Editar usuário';
-      this.form.get('password')?.clearValidators();
-      this.form.get('password')?.updateValueAndValidity();
-      this.form.get('companyId')?.disable();
-      this.loadUser(id);
+      this.setPasswordRequired(false);
+      this.form.controls.companyId.disable();
+      void this.loadUser(id);
     } else {
       this.title = 'Novo usuário';
-      this.loadCompanies();
+      void this.loadCompanies();
       this.refreshActions();
     }
   }
@@ -75,7 +89,12 @@ export class User implements OnInit {
   async loadCompanies(): Promise<void> {
     try {
       const result = await firstValueFrom(
-        this.companyService.listCompanies({ page: 1, pageSize: 200, sortBy: 'name', sortDirection: 'asc' })
+        this.companyService.listCompanies({
+          page: 1,
+          pageSize: 200,
+          sortBy: 'name',
+          sortDirection: 'asc',
+        })
       );
       this.companies.set(result.data);
     } catch {
@@ -83,25 +102,25 @@ export class User implements OnInit {
     }
   }
 
-  loadUser(id: string): void {
+  async loadUser(id: string): Promise<void> {
     this.isLoading = true;
 
-    this.userService.getById(id).subscribe({
-      next: (user) => {
-        this.form.patchValue({
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        });
+    try {
+      const user = await firstValueFrom(this.userService.getById(id));
 
-        this.refreshActions();
-        this.form.markAsPristine();
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      },
-    });
+      this.form.patchValue({
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      });
+
+      this.refreshActions();
+      this.form.markAsPristine();
+    } catch {
+      this.snackBar.error('Não foi possível carregar o usuário');
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   async save(): Promise<void> {
@@ -112,27 +131,33 @@ export class User implements OnInit {
 
     try {
       if (this.userId) {
-        await firstValueFrom(this.userService.update({
-          id: this.userId,
-          name: formValue.name,
-          email: formValue.email,
-          role: formValue.role,
-        }));
+        await firstValueFrom(
+          this.userService.update({
+            id: this.userId,
+            name: formValue.name,
+            email: formValue.email,
+            role: formValue.role,
+          })
+        );
         this.snackBar.success('Usuário atualizado com sucesso');
       } else {
-        await firstValueFrom(this.userService.create({
-          companyId: formValue.companyId,
-          name: formValue.name,
-          email: formValue.email,
-          role: formValue.role,
-          password: formValue.password,
-        }));
+        await firstValueFrom(
+          this.userService.create({
+            companyId: formValue.companyId,
+            name: formValue.name,
+            email: formValue.email,
+            role: formValue.role,
+            password: formValue.password,
+          })
+        );
         this.snackBar.success('Usuário criado com sucesso');
       }
 
       this.form.markAsPristine();
       this.hasChanges = true;
       this.closeSheet();
+    } catch {
+      this.snackBar.error('Não foi possível salvar o usuário');
     } finally {
       this.isLoading = false;
     }
@@ -148,6 +173,8 @@ export class User implements OnInit {
       this.snackBar.success('Usuário excluído com sucesso');
       this.hasChanges = true;
       this.closeSheet();
+    } catch {
+      this.snackBar.error('Não foi possível excluir o usuário');
     } finally {
       this.isLoading = false;
     }
@@ -155,6 +182,9 @@ export class User implements OnInit {
 
   async onSheetAction(action: IActionButtonItem): Promise<void> {
     switch (action.id) {
+      case 'change-password':
+        this.openChangePasswordDialog();
+        break;
       case 'delete':
         await this.deleteUser();
         break;
@@ -174,8 +204,34 @@ export class User implements OnInit {
     }
 
     this.actionsBtn = [
+      { id: 'change-password', label: 'Alterar senha', icon: 'password' },
       { id: 'delete', label: 'Excluir', icon: 'delete' },
     ];
+  }
+
+  private openChangePasswordDialog(): void {
+    if (!this.userId) return;
+
+    this.dialog.open(ChangeUserPasswordDialog, {
+      width: '420px',
+      maxWidth: 'calc(100vw - 32px)',
+      data: {
+        userId: this.userId,
+      },
+    });
+  }
+
+  private setPasswordRequired(required: boolean): void {
+    const passwordControl = this.form.controls.password;
+
+    if (required) {
+      passwordControl.setValidators(this.passwordValidators);
+    } else {
+      passwordControl.clearValidators();
+      passwordControl.reset('', { emitEvent: false });
+    }
+
+    passwordControl.updateValueAndValidity();
   }
 
   private isValidForm(): boolean {
