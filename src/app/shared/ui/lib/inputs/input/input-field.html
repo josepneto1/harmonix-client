@@ -19,6 +19,7 @@
       mat-icon-button
       matSuffix
       type="button"
+      (mousedown)="$event.preventDefault()"
       (click)="togglePasswordVisibility()"
       [attr.aria-label]="'Mostrar senha'"
     >
